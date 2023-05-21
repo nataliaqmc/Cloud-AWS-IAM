@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AssumeRole",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam:: 123123123123:role/access-*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
+                    "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                }
+            }
+        }
+    ]
+}

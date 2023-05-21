@@ -1,0 +1,8 @@
+-- Ambiente virtual:
+env
+
+-- Arquivos do terraform:
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
