@@ -6,3 +6,7 @@ env
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.lock.hcl
+
+-- Arquivo com as informações pessoais:
+config
+config.tfvars.json

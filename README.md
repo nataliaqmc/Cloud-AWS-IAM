@@ -66,3 +66,12 @@ Depois, rodar o seguinte código:
 
     
 </details>
+
+
+## Rúbrica:
+
+- [x] Conceito C+ **feito**: Ambiente funcionando conforme projeto proposto sem os tipos de usuários configurados no IAM.
+
+- [x] Conceito B+ **feito**: Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação entregue.
+
+- [x] Conceito A+ **feito**:  Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação bem desenvolvida.

@@ -1,17 +1,13 @@
+
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AssumeRole",
             "Effect": "Allow",
+            "Principal": { "AWS": "arn:aws:iam:: ${var.AWS_ACCOUNT_ID}:role/access-*" },
             "Action": "sts:AssumeRole",
-            "Resource": "arn:aws:iam:: 123123123123:role/access-*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
-                    "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
-                }
-            }
+            "Condition": { "StringEquals": {"iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
+            "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"} }
         }
     ]
-}
+  }
