@@ -67,5 +67,11 @@ Depois, rodar o seguinte código:
 
 ### Referências bibliográficas:
  - Terraform Registry. Disponível em: https://registry.terraform.io/providers/hashicorp/aws/latest/docs. Acesso em: 24 maio. 2023.
+ - What is IAM? - AWS Identity and Access Management. Disponível em: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html. Acesso em: 24 maio. 2023.
+ - Projeto: Computação Nuvem - Infraestrutura por Código. Disponível em: <https://fran-janela.github.io/roteiro-proj-CompNuvem/>. Acesso em: 24 maio. 2023.
+
+‌
+
+‌
 
 ‌
