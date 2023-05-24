@@ -1,1 +1,288 @@
-AWS IAM
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <link href="style.js">
+        
+    </head>
+    <body>
+        <header>
+            <h1>AWS Idetity and Access Management (IAM):</h1>
+        </header>
+        <div class="inicio">
+            <h2>Descrição do serviço AWS IAM:</h2>
+            <div>
+                <h3>Características:</h3>
+                <p>O AWS IAM é um serviço da Web que permite controlar o acesso aos recursos da AWS de uma maneira segura, permitindo o gerenciamento das permissões de acesso aos recursos pelos usuários. Dentre os recursos fornecidos do IAM, é possível realizar um acesso compartilhado à sua Conta da AWS, conceder permissões granulares (permissões diferentes para pessoas diferentes) e acessar diferentes aplicações da AWS.</p>
+            </div>
+            <div>
+                <h3>Estrutura das políticas:</h3>
+                <p>Para controlar os acessos, é necessário utilizar políticas definindo as permissões aos usuários. A política IAM é composta por alguns elementos, sendo eles:
+                    <li>Version: define a versão da linguagem da política (sempre usar a versão mais recente).</li>
+                    <li>Statement: é usado como pai dos demais elementos.</li>
+                    <li>Sid: permite definir um nome (não é obrigatório).</li>
+                    <li>Effect:possui o valor ‘Allow’ ou ‘Deny’.</li>
+                    <li>Action: a lista de ações relacionados a política.</li>
+                    <li>Resource: define quais recursos a política é aplicada.</li>
+                    <li>Principal: define as identidades que possuem permissão de acesso (ou não) os recursos da política.</li>
+                    <li>Condition: define algumas condições que a política se aplica.</p>
+            </div>
+            <div>
+                <h3>Solução tecnológica para a infraestrutura:</h3>
+                <p>Dentro de uma empresa, muitas vezes é necessário conceder diferentes permissões para os diferentes cargos ou equipes de trabalho. Com isso, é possível usar as etiquetas de recursos da AWS e as etiquetas de entidades de função do IAM para implementar uma estratégia ABAC para serviços compatíveis com ela, concedendo ou não permissões com base nesses atributos. Para esse projeto, será concedido direito a uso de diferentes recursos da AWS presentes na imagem à baixo.</p>
+                <img src="img/apps.png">
+                <p>Sendo assim, a ideia será criar quatro usuários pertencentes a quatro projetos diferentes, sendo dois da equipe de desenvolvedores e dois da equipe de marketing. Com essa separação, cada usuário terá acesso a alguns recursos da AWS específicos para seus projetos como mostrado abaixo, além de poderem criar, alterar, ler e apagar os dados de seus próprios projetos/arquivos. Cada usuário terá acesso aos recursos AWS que estão marcados com suas determinadas cores. Além disso, um usuário só poderá editar arquivos de seu projeto, porém poderá visualizar os arquivos dos outros integrantes de sua equipe.</p>
+                <img src="img/permissoes.png">
+            </div>
+        </div>
+        <div>
+            <h2>Roteiro de instalação:</h2>
+            <div>
+                <h3>Pré-requisitos:</h3>
+                <p>Para executar as etapas de instalação do serviço, será necessário possuir:</p>
+                <ul>
+                    <li>Uma conta da AWS com a qual você possa fazer login como usuário com permissões administrativas.</li>
+                    <li>O Id de conta de 12 dígitos que será usado para a criação de funções.</li>
+                        <ul>
+                            <li>É possível localizar o Id da conta da AWS usando o serviço AWS Management Console, e seguindo os passos a seguir:</li>
+                            <ul>
+                                <li>Selecione Suporte na barra de navegação do canto superior direito.</li>
+                                <li> da aba Suporte, selecione Support Center.</li>
+                                <li> O ID da conta (ou número da conta) aparece no painel de navegação à esquerda. Clone o repositório em seu computador:</li>
+                            </ul>
+                        </ul>
+                </ul>
+                <pre class="codes-single"><code>git clone</code></pre>
+                <p>Crie um arquivo na pasta iam/config chamado config.tfvars.json com o seguinte conteúdo (coloque os valores da sua própria conta nas três primeiras variáveis):</p>
+                <pre class="codes"><code>
+{
+    "AWS_ACCESS_KEY_ID": "XXXXXXXXXXXXXXXXXXXX",
+    "AWS_SECRET_ACCESS_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "AWS_ACCOUNT_ID": "123456789012",
+    "AWS_USER_NAME1": "blue",
+    "AWS_USER_NAME2": "pink",
+    "AWS_USER_NAME3": "purple",
+    "AWS_USER_NAME4": "green",
+    "AWS_TEAM_1": "desenvolvedores",
+    "AWS_TEAM_2": "marketing",
+    "AWS_PROJECT_1": "megadados",
+    "AWS_PROJECT_2": "redes",
+    "AWS_PROJECT_3": "machine",
+    "AWS_PROJECT_4": "inteligencia"
+}
+                    </code></pre>
+                <p>Baixe as bibliotecas necessárias para o programa por meio do comando:</p>
+                <pre class="codes-single"><code>python -m pip install -r requirements.txt</code></pre>
+                <p>Para rodar a solução, será necessário rodar o código abaixo no Prompt de Comando:</p>
+                <pre class="codes-single"><code>terraform init</code></pre>
+                <p>Depois, rodar o seguinte código:</p>
+                <pre class="codes-single"><code>terraform apply -var-file=config/config.tfvars.json</code></pre>
+            </div>
+        </div>
+        <div>
+            <h2>Roteiro de desenvolvimento da solução:</h2>
+            <div>
+                <h3>Criando usuários:</h3>
+                <p>Primeiramente, foi necessário criar os quatro usuários (blue, pink, purple, green) e adicionar as suas respectivas tags de equipe e projeto.</p>
+                <img src="img/usuarios.png">
+                <p>Para isso, repetimos o código abaixo mudando apenas as variáveis, e assim criamos os usuários.</p>
+                <pre class="codes">
+                <code>
+resource "aws_iam_user" "user_create" {             # Cada "resource" precisa de um "name" específico
+name = var.AWS_USER_NAME1                           # O nome do usuário será adcionado automaticamente aqui, baseado no que foi declarado nas configurações
+tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o projeto e a equipe que o usuário faz parte
+        "access-team": "${var.AWS_TEAM_1}"  
+    }
+}               </code></pre>
+                <p>Para acessar o código completo dos usuários, basta clicar <a href="https://github.com/nataliaqmc/Cloud-AWS-IAM/blob/main/iam/user.tf">aqui.</a></p>
+                <table>
+                    <tr>
+                        <th>User name</th>
+                        <th>User tags - chave</th>
+                        <th>User tags - valor</th>
+                    </tr>
+                    <tr>
+                        <td>blue</td>
+                        <td>access-project e access-team</td>
+                        <td>megadados e desenvolvedores</td>
+                    </tr>
+                    <tr>
+                        <td>pink</td>
+                        <td>access-project e access-team</td>
+                        <td>redes e desenvolvedores</td>
+                    </tr>
+                    <tr>
+                        <td>purple</td>
+                        <td>access-project e access-team</td>
+                        <td>machine e marketing</td>
+                    </tr>
+                    <tr>
+                        <td>green</td>
+                        <td>access-project e access-team</td>
+                        <td>inteligencia e marketing</td>
+                    </tr>
+                    
+                    
+                </table>
+            </div>
+            <div>
+                <h3>Criando políticas:</h3>
+                <p>Com os usuários e tags criadas, passamos agora para a criação das políticas. 
+                   Será necessário criar uma política gerenciada pelo cliente chamada access-assume-role 
+                   com a finalidade de permitir que um usuário assuma qualquer função em sua 
+                   conta com o prefixo access-. Com essa política criada, torna-se possível 
+                   realizar a divisão das equipes e projetos entre os usuários.
+                </p>
+                <pre class="codes"><code>
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AssumeRole",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam:: 123123123123:role/access-*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
+                    "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                }
+            }
+        }
+    ]
+}           </code></pre>  
+            <p>Passamos agora para a implementação da política do controle de acesso 
+                baseado em atributos chamada access-same-project-team. Essa política 
+                terá como finalidade atribuir os recursos de create, read, edit e delete
+                levando em consideração as tags de cada usuário. 
+                A criação dessa política será semelhante à criação da política
+                gerenciada pelo cliente, sendo necessário seguir os seguintes passos. 
+            </p>
+            <pre class="codes"><code>
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllActionsSecretsManagerSameProjectSameTeam",
+            "Effect": "Allow",
+            "Action": "secretsmanager:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
+                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}",
+                    "aws:ResourceTag/cost-center": "${aws:PrincipalTag/cost-center}"
+                },
+                "ForAllValues:StringEquals": {
+                    "aws:TagKeys": [
+                        "access-project",
+                        "access-team",
+                        "cost-center",
+                        "Name",
+                        "OwnedBy"
+                    ]
+                },
+                "StringEqualsIfExists": {
+                    "aws:RequestTag/access-project": "${aws:PrincipalTag/access-project}",
+                    "aws:RequestTag/access-team": "${aws:PrincipalTag/access-team}",
+                    "aws:RequestTag/cost-center": "${aws:PrincipalTag/cost-center}"
+                }
+            }
+        },
+        {
+            "Sid": "AllResourcesSecretsManagerNoTags",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetRandomPassword",
+                "secretsmanager:ListSecrets"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ReadSecretsManagerSameTeam",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:Describe*",
+                "secretsmanager:Get*",
+                "secretsmanager:List*"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                }
+            }
+        },
+        {
+            "Sid": "DenyUntagSecretsManagerReservedTags",
+            "Effect": "Deny",
+            "Action": "secretsmanager:UntagResource",
+            "Resource": "*",
+            "Condition": {
+                "ForAnyValue:StringLike": {
+                    "aws:TagKeys": "access-*"
+                }
+            }
+        },
+        {
+            "Sid": "DenyPermissionsManagement",
+            "Effect": "Deny",
+            "Action": "secretsmanager:*Policy",
+            "Resource": "*"
+        }
+    ]
+    }
+                   
+                   
+            </code></pre>
+            </div>
+            <div>
+                <h3>Criando grupos:</h3>
+                <p></p>
+            </div>
+            <div>
+                <h3>Criando funções:</h3>
+                <p></p>
+                <table>
+                    <tr>
+                        <th>Job function</th>
+                        <th>Role tags</th>
+                        <th>Role name</th>
+                        <th>Role description</th>
+                    </tr>
+                    <tr>
+                        <td>Projeto megadados desenvolvedores</td>
+                        <td>access-project = megadados e access-team = desenvolvedores</td>
+                        <td>access-megadados-desenvolvedores</td>
+                        <td>Permite os desenvolvedores lerem todos os arquivos de desenvolvedores e criar- deletar/ editar os arquivos do projeto de megadados de desenvolvedores.</td>
+                    </tr>
+                    <tr>
+                        <td>Projeto redes desenvolvedores</td>
+                        <td>access-project = redes e access-team = desenvolvedores</td>
+                        <td>access-redes-desenvolvedores</td>
+                        <td>Permite os desenvolvedores lerem todos os arquivos de desenvolvedores e criar- deletar/ editar os arquivos do projeto de redes de desenvolvedores.</td>
+                    </tr>
+                    <tr>
+                        <td>Projeto machine marketing</td>
+                        <td>access-project = machine e access-team = marketing</td>
+                        <td>access-machine-marketing</td>
+                        <td>Permite a equipe de marketing ler todos os arquivos de marketing e criar- deletar/ editar os arquivos do projeto de machine de marketing.</td>
+                    </tr>
+                    <tr>
+                        <td>Projeto inteligencia marketing</td>
+                        <td>access-project = inteligencia e access-team = marketing</td>
+                        <td>access-inteligencia-marketing</td>
+                        <td>Permite a equipe de marketing ler todos os arquivos de marketing e criar- deletar/ editar os arquivos do projeto de inteligencia de marketing.</td>
+                    </tr>
+                    
+                    
+                </table>
+            </div>
+            <div>
+                <h3>Realizando as permissões específicas:</h3>
+                <p></p>
+            </div>
+        </div>
+        
+    </body>
+</html>
