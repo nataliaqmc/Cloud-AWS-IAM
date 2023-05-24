@@ -36,7 +36,29 @@ Para executar as etapas de instalação do serviço, será necessário possuir:
         - Selecione Suporte na barra de navegação do canto superior direito.
         - Dentro da aba Suporte, selecione Support Center.
         - O ID da conta (ou número da conta) aparece no painel de navegação à esquerda. 
+Clone o repositório em seu computador:
+```
+    git clone 
+```
+Crie um arquivo na pasta ***iam/config*** chamado ***config.tfvars.json*** com o seguinte conteúdo (coloque os valores da sua própria conta nas três primeiras variáveis):
+```
+    {
+    "AWS_ACCESS_KEY_ID": "XXXXXXXXXXXXXXXXXXXX",
+    "AWS_SECRET_ACCESS_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "AWS_ACCOUNT_ID": "123456789012",
+    "AWS_USER_NAME1": "blue",
+    "AWS_USER_NAME2": "pink",
+    "AWS_USER_NAME3": "purple",
+    "AWS_USER_NAME4": "green",
+    "AWS_TEAM_1": "desenvolvedores",
+    "AWS_TEAM_2": "marketing",
+    "AWS_PROJECT_1": "megadados",
+    "AWS_PROJECT_2": "redes",
+    "AWS_PROJECT_3": "machine",
+    "AWS_PROJECT_4": "inteligencia"
 
+}
+```
 Baixe as bibliotecas necessárias para o programa por meio do comando:
 ```
     python -m pip install -r requirements.txt
@@ -49,14 +71,34 @@ Depois, rodar o seguinte código:
 ```
     terraform apply -var-file=config/config.tfvars.json
 ```
-    
-
 
 ### Roteiro de desenvolvimento da solução:
-#### Criando Políticas:
 #### Criando Usuários:
 ![image](https://github.com/nataliaqmc/Cloud-AWS-IAM/assets/62567966/235f0b0b-e47c-40f3-9316-391ea1d85f0f)
+Primeiramente, foi necessário criar os quatro usuários (***blue, pink, purple, green***) e adicionar as suas respectivas tags de equipe e projeto. Para isso, repetimos o código abaixo mudando apenas as variáveis, e assim criamos os usuários. 
+```
+    resource "aws_iam_user" "user_create" {             # Cada "resource" precisa de um "name" específico
+    name = var.AWS_USER_NAME1                           # O nome do usuário será adcionado automaticamente aqui, baseado no que foi declarado nas configurações
+    tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o projeto e a equipe que o usuário faz parte
+            "access-team": "${var.AWS_TEAM_1}"  
+      }
+    }
+```
+![image](https://github.com/nataliaqmc/Cloud-AWS-IAM/assets/62567966/bf1b8545-5acb-45e7-9a43-85c6e3fdacde)
 
+Para acessar o código completo dos usuários, basta clicar [aqui.](iam/user.tf)
+#### Criando Políticas:
+Com os usuários e tags criadas, passamos agora para a criação das políticas. Será necessário criar uma política gerenciada pelo cliente chamada *access-assume-role* com a finalidade de permitir que um usuário assuma qualquer função em sua conta com o prefixo *access-*. Com essa política criada, torna-se possível realizar a divisão das equipes e projetos entre os usuários.
+```
+
+```
+#### Criando grupos:
+
+ 
+#### Criando as funções:
+![image](https://github.com/nataliaqmc/Cloud-AWS-IAM/assets/62567966/f1d8b55b-fa4b-4dd4-b550-c75eb08f024c)
+
+#### Realizando as permissões específicas:
 ### Rúbrica:
 
 - [ ] Conceito C+ : Ambiente funcionando conforme projeto proposto sem os tipos de usuários configurados no IAM.
