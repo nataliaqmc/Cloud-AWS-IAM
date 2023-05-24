@@ -1,0 +1,16 @@
+{
+    "AWS_ACCESS_KEY_ID": "XXXXXXXXXXXXXXXXXXXX",
+    "AWS_SECRET_ACCESS_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "AWS_ACCOUNT_ID": "123456789012",
+    "AWS_USER_NAME1": "blue",
+    "AWS_USER_NAME2": "pink",
+    "AWS_USER_NAME3": "purple",
+    "AWS_USER_NAME4": "green",
+    "AWS_TEAM_1": "desenvolvedores",
+    "AWS_TEAM_2": "marketing",
+    "AWS_PROJECT_1": "megadados",
+    "AWS_PROJECT_2": "redes",
+    "AWS_PROJECT_3": "machine",
+    "AWS_PROJECT_4": "inteligencia"
+
+}

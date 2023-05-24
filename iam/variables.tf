@@ -1,3 +1,6 @@
+###################################################################################
+# Private variables:
+###################################################################################
 # ACCESS KEY:
 variable "AWS_ACCESS_KEY_ID" {
   type      = string
@@ -16,7 +19,9 @@ variable "AWS_ACCOUNT_ID" {
   sensitive = true
 }
 
-# USERS:
+###################################################################################
+# User names variables:
+###################################################################################
 variable "AWS_USER_NAME1" {
   type = string
   sensitive = false
@@ -33,8 +38,9 @@ variable "AWS_USER_NAME4" {
   type = string
   sensitive = false
 }
-
-# TEAMS:
+###################################################################################
+# Team name variables:
+###################################################################################
 variable "AWS_TEAM_1" {
   type = string
   sensitive = false
@@ -44,8 +50,9 @@ variable "AWS_TEAM_2" {
   sensitive = false
 }
 
-
-# PROJECT:
+###################################################################################
+# Project name variables:
+###################################################################################
 variable "AWS_PROJECT_1" {
   type = string
   sensitive = false

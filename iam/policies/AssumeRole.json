@@ -6,8 +6,10 @@
             "Effect": "Allow",
             "Principal": { "AWS": "arn:aws:iam:: ${var.AWS_ACCOUNT_ID}:role/access-*" },
             "Action": "sts:AssumeRole",
-            "Condition": { "StringEquals": {"iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
-            "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"} }
+            "Condition": 
+            { "StringEquals": {
+                "iam:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
+                "iam:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"} }
         }
     ]
   }

@@ -8,21 +8,20 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
-                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                    "aws:ResourceTag/access-project": "megadados",
+                    "aws:ResourceTag/access-team": "desenvolvedores"
                 },
                 "ForAllValues:StringEquals": {
                     "aws:TagKeys": [
                         "access-project",
                         "access-team",
-                        "cost-center",
                         "Name",
                         "OwnedBy"
                     ]
                 },
                 "StringEqualsIfExists": {
-                    "aws:RequestTag/access-project": "${aws:PrincipalTag/access-project}",
-                    "aws:RequestTag/access-team": "${aws:PrincipalTag/access-team}"
+                    "aws:ResourceTag/access-project": "megadados",
+                    "aws:ResourceTag/access-team": "desenvolvedores"
                 }
             }
         },
@@ -46,7 +45,7 @@
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                    "aws:ResourceTag/access-team": "desenvolvedores"
                 }
             }
         },
@@ -68,7 +67,4 @@
             "Resource": "*"
         }
     ]
-   }
-   
-        
-   
+}
