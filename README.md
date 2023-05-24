@@ -2,12 +2,10 @@
 #### Feito por: Natália Queiroz Menezes Carreras
 
 
-<details>
-<summary>Descrição do serviço AWS IAM:</summary>
-
-##### Características:
+### Descrição do serviço AWS IAM:
+#### Características:
 O AWS IAM é um serviço da Web que permite controlar o acesso aos recursos da AWS de uma maneira segura, permitindo o gerenciamento das permissões de acesso aos recursos pelos usuários. Dentre os recursos fornecidos do IAM, é possível realizar um acesso compartilhado à sua Conta da AWS, conceder permissões granulares (permissões diferentes para pessoas diferentes) e acessar diferentes aplicações da AWS.
-##### Estrutura das políticas:
+#### Estrutura das políticas:
 Para controlar os acessos, é necessário utilizar políticas definindo as permissões aos usuários. A política IAM é composta por alguns elementos, sendo eles:
 - Version: define a versão da linguagem da política (sempre usar a versão mais recente).
 - Statement: é usado como pai dos demais elementos. 
@@ -28,11 +26,9 @@ Sendo assim, a ideia será criar quatro usuários pertencentes a quatro projetos
 ![image](https://github.com/nataliaqmc/Cloud-AWS-IAM/assets/62567966/eb49012a-4f1e-48df-8768-108d38f493dd)
 </details>
 
-
-<details>
-<summary>Roteiro de instalação</summary>
+### Roteiro de instalação:
     
-##### Pré-requisitos:
+#### Pré-requisitos:
 Para executar as etapas de instalação do serviço, será necessário possuir:
 - Uma conta da AWS com a qual você possa fazer login como usuário com permissões administrativas.
 - O Id de conta de 12 dígitos que será usado para a criação de funções.
@@ -51,27 +47,25 @@ Para rodar a solução, será necessário rodar o código abaixo no Prompt de Co
 ```
 Depois, rodar o seguinte código:
 ```
-    terraform apply
+    terraform apply -var-file=config/config.tfvars.json
 ```
     
-</details>
 
-<details>
-<summary>Roteiro de desenvolvimento da solução:</summary>
-    
-##### Criando Políticas:
-##### Criando Usuários:
+
+### Roteiro de desenvolvimento da solução:
+#### Criando Políticas:
+#### Criando Usuários:
 ![image](https://github.com/nataliaqmc/Cloud-AWS-IAM/assets/62567966/235f0b0b-e47c-40f3-9316-391ea1d85f0f)
 
-
-    
-</details>
-
-
-## Rúbrica:
+### Rúbrica:
 
 - [ ] Conceito C+ : Ambiente funcionando conforme projeto proposto sem os tipos de usuários configurados no IAM.
 
 - [ ] Conceito B+ : Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação entregue.
 
 - [ ] Conceito A+ :  Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação bem desenvolvida.
+
+### Referências bibliográficas:
+ - Terraform Registry. Disponível em: https://registry.terraform.io/providers/hashicorp/aws/latest/docs. Acesso em: 24 maio. 2023.
+
+‌
