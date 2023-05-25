@@ -82,6 +82,73 @@
         <div>
             <h2>Roteiro de desenvolvimento da solução:</h2>
             <div>
+                <h3>Criando o arquivo de variáveis:</h3>
+                <p>Com o arquivo <em>config.tfvars.json</em>criado, foi necessário
+                   criar o arquivo que define o tipo dessas variáveis, chamado <em>variables.tf</em>
+                   . Nele, foi colocado o seguinte código:
+                </p>
+                <pre class="codes"><code>
+# ACCESS KEY:
+variable "AWS_ACCESS_KEY_ID" {
+    type      = string
+    sensitive = true
+}
+
+# SECRET KEY:
+variable "AWS_SECRET_ACCESS_KEY" {
+    type      = string
+    sensitive = true
+}
+
+# ACCOUNT ID:
+variable "AWS_ACCOUNT_ID" {
+    type = string
+    sensitive = true
+}
+variable "AWS_USER_NAME1" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_USER_NAME2" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_USER_NAME3" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_USER_NAME4" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_TEAM_1" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_TEAM_2" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_PROJECT_1" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_PROJECT_2" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_PROJECT_3" {
+    type = string
+    sensitive = false
+    }
+    variable "AWS_PROJECT_4" {
+    type = string
+    sensitive = false
+    }
+                      
+                </code></pre>
+            </div>
+            <div>
                 <h3>Criando usuários:</h3>
                 <p>Primeiramente, foi necessário criar os quatro usuários (blue, pink, purple, green) e adicionar as suas respectivas tags de equipe e projeto.</p>
                 <img src="img/usuarios.png">
@@ -94,7 +161,8 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
         "access-team": "${var.AWS_TEAM_1}"  
     }
 }               </code></pre>
-                <p>Para acessar o código completo dos usuários, basta clicar <a href="https://github.com/nataliaqmc/Cloud-AWS-IAM/blob/main/iam/user.tf">aqui.</a></p>
+                <p>Para acessar o código completo dos usuários, basta clicar <a href="https://github.com/nataliaqmc/Cloud-AWS-IAM/blob/main/iam/user.tf">aqui.</a> Na tabela abaixo,
+                podemos ver as tags que foram utilizadas e os usuários.</p>
                 <table>
                     <tr>
                         <th>User name</th>
@@ -158,7 +226,12 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
                 A criação dessa política será semelhante à criação da política
                 gerenciada pelo cliente, sendo necessário seguir os seguintes passos. 
             </p>
-            <pre class="codes"><code>
+            <ul>
+                <li>Crie os arquivos .json com as políticas.</li>
+                <li>Será necessário criar um arquivo para cada projeto. 
+                    Abaixo temos um exemplo do projeto de "megadados".
+                </li>
+                <pre class="codes"><code>
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -169,23 +242,20 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/access-project": "${aws:PrincipalTag/access-project}",
-                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}",
-                    "aws:ResourceTag/cost-center": "${aws:PrincipalTag/cost-center}"
+                    "aws:ResourceTag/access-project": "megadados",
+                    "aws:ResourceTag/access-team": "desenvolvedores"
                 },
                 "ForAllValues:StringEquals": {
                     "aws:TagKeys": [
                         "access-project",
                         "access-team",
-                        "cost-center",
                         "Name",
                         "OwnedBy"
                     ]
                 },
                 "StringEqualsIfExists": {
-                    "aws:RequestTag/access-project": "${aws:PrincipalTag/access-project}",
-                    "aws:RequestTag/access-team": "${aws:PrincipalTag/access-team}",
-                    "aws:RequestTag/cost-center": "${aws:PrincipalTag/cost-center}"
+                    "aws:RequestTag/access-project": "megadados",
+                    "aws:RequestTag/access-team": "desenvolvedores"
                 }
             }
         },
@@ -209,7 +279,7 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
             "Resource": "*",
             "Condition": {
                 "StringEquals": {
-                    "aws:ResourceTag/access-team": "${aws:PrincipalTag/access-team}"
+                    "aws:ResourceTag/access-team": "desenvolvedores"
                 }
             }
         },
@@ -231,18 +301,75 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
             "Resource": "*"
         }
     ]
+    }                       
+                </code></pre>
+                <li>Com os arquivos criados, basta associarmos eles às políticas com o código abaixo:</li>
+                <pre class="codes"><code>
+resource "aws_iam_policy" "access-same-1" {
+    name = "access-same-${var.AWS_PROJECT_1}-${var.AWS_TEAM_1}"
+    policy = "${file("policies/AccessSame-${var.AWS_PROJECT_1}-${var.AWS_TEAM_1}.json")}"
     }
-                   
-                   
+                </code></pre>
+            </ul>
+            <p>Foi necessário criar também uma política para permitir "Full access" do sts. Para
+                isso, foi utilizado o código abaixo:
+            </p>
+            <pre class="codes"><code>
+resource "aws_iam_policy" "stsAccess" {
+    name = "stsFullAccess"
+    policy = EOF                             # Adicione "<<" na frente do "EOF"
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "arn:aws:iam::${var.AWS_ACCOUNT_ID}:role/UpdateAPP"
+            }
+        ]
+    }
+    EOF
+    }
             </code></pre>
+            <p>Para acessar o código completo das políticas, basta clicar <a href="https://github.com/nataliaqmc/Cloud-AWS-IAM/blob/main/iam/policies.tf">aqui.</a></p>
+            
             </div>
             <div>
                 <h3>Criando grupos:</h3>
-                <p></p>
+                <p>Agora, iremos criar os grupos para que possamos associar as políticas aos 
+                    grupos, ao invés de associarmos direto aos usuários. Fazendo isso, quando adicionarmos
+                    um usuário ao grupo, ele receberá automaticamente as políticas do grupo.
+                </p>
+                <p>Para criarmos um grupo, foi necessário utilizar o seguinte código:</p>
+                <pre class="codes"><code>
+resource "aws_iam_group" "desenvolvedores" {
+    name = var.AWS_TEAM_1
+    path = "/users/"
+    }
+                </code></pre>
+                <p>Para facilitar a associação de políticas, foram criados grupos
+                    para todos os projetos e equipes. Depois, foi necessário adicionar 
+                    os usuários às suas respectivas equipes e projetos por meio
+                    do código a seguir:
+                </p>
+                <pre class="codes"><code>
+resource "aws_iam_group_membership" "equipeDesenvolvedores" {
+    name = "equipe-${var.AWS_TEAM_1}"
+    users = [
+        aws_iam_user.user_create.name,
+        aws_iam_user.user_createPink.name,
+    ]
+    
+    group = aws_iam_group.desenvolvedores.name
+    }
+                </code></pre>
+                <p>Para acessar o código completo dos grupos, basta clicar <a href="https://github.com/nataliaqmc/Cloud-AWS-IAM/blob/main/iam/groups.tf">aqui.</a></p>
             </div>
             <div>
                 <h3>Criando funções:</h3>
-                <p></p>
+                <p>Começamos então a criar as <em>Job Functions</em> para o nosso projeto.
+                Para isso, seguimos o conteúdo apresentado na tabela abaixo para cria-las.</p>
+                
                 <table>
                     <tr>
                         <th>Job function</th>
@@ -274,13 +401,84 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
                         <td>access-inteligencia-marketing</td>
                         <td>Permite a equipe de marketing ler todos os arquivos de marketing e criar- deletar/ editar os arquivos do projeto de inteligencia de marketing.</td>
                     </tr>
-                    
-                    
                 </table>
+                <p>Foi necessário utilizar o seguinte código para cada uma das 
+                    <em>roles</em>, tanto para cria-las, como tambem para associa-las
+                    às políticas <em>access-same-project-team</em> criadas anteriormente.
+                </p>
+                <pre class="codes"><code>
+resource "aws_iam_role" "roleAssume" {
+    name = "access-${var.AWS_PROJECT_1}-${var.AWS_TEAM_1}"
+    tags = {"access-project":"${var.AWS_PROJECT_1}",
+            "access-team": "${var.AWS_TEAM_1}"  
+    }
+    assume_role_policy = EOF                         # Adicione "<<" na frente do "EOF"
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "AWS": "arn:aws:iam::${var.AWS_ACCOUNT_ID}:root"
+                },
+                "Action": "sts:AssumeRole",
+                "Condition": {
+                    "StringEquals": {"iam:ResourceTag/access-project": "${var.AWS_PROJECT_1}",
+                                    "iam:ResourceTag/access-team":"${var.AWS_TEAM_1}"}
+                }
+            }
+        ]
+    }
+    EOF
+    }
+
+resource "aws_iam_role_policy_attachment" "attach1" {
+    role       = aws_iam_role.roleAssume.name
+    policy_arn = aws_iam_policy.access-same-1.arn
+    }
+                </code></pre>
             </div>
             <div>
-                <h3>Realizando as permissões específicas:</h3>
-                <p></p>
+                <h3>Associando as políticas e permissões:</h3>
+                <p>
+                    Com todas as políticas, usuários, grupos e funções criadas, precisamos
+                    associar as permissões aos usuários ou grupos. Iniciamos associando as permissões de grupos
+                    por meio do comando a seguir:
+                </p>
+                <pre class="codes"><code>
+resource "aws_iam_group_policy_attachment" "AttachGroup1" {
+    group       = aws_iam_group.megadados.name
+    policy_arn = aws_iam_policy.access-same-1.arn
+    }
+                </code></pre>
+                <p>Utilizamos esse código para deinir todas as políticas que poderiam ser associadas a 
+                    todos os membros do grupo, como a política <em>access-assume-role</em> e 
+                    <em>access-same-project-team</em>.
+                </p>
+                <p>Agora que as permissões gerais foram aplicadas, iniciamos então o processo de 
+                    permissões específicas para cada usuário. Para isso, utilizamos em grande parte 
+                    as políticas próprias da <em>aws</em> que podem ser associadas aos usuários por meio
+                    do código a seguir:
+                </p>
+                <pre class="codes"><code>
+resource "aws_iam_user_policy_attachment" "iam1" {
+    user       = aws_iam_user.user_create.name
+    policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
+    }
+                </code></pre>
+                <p>Já as políticas que foram criadas por nós, é necessário utilizar o seguinte código:</p>
+                <pre class="codes"><code>
+resource "aws_iam_user_policy_attachment" "sts" {
+    user       = aws_iam_user.user_create.name
+    policy_arn = aws_iam_policy.stsAccess.arn
+    }
+                </code></pre>
+            </div>
+            <div>
+                <h3>Testando o funcionamento da solução:</h3>
+                <p>Para testarmos o funcionamento da solução, será necessário seguir os
+                    seguintes passos:
+                </p>
             </div>
         </div>
         
