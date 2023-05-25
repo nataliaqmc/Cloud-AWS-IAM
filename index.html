@@ -48,12 +48,19 @@
                             <ul>
                                 <li>Selecione Suporte na barra de navegação do canto superior direito.</li>
                                 <li> da aba Suporte, selecione Support Center.</li>
-                                <li> O ID da conta (ou número da conta) aparece no painel de navegação à esquerda. Clone o repositório em seu computador:</li>
+                                <li> O ID da conta (ou número da conta) aparece no painel de navegação à esquerda. </li>
                             </ul>
                         </ul>
+                    <li>A sua <em>access key</em> e a sua <em>secret access key</em>.</li>
+                    <li>O terraform instalado na sua máquina local.</li>
+                        <ul><li>Para saber mais acesse <a href="https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli">aqui!</a></li></ul>
+                    <li>AWS CLI instalado em sua máquina local.</li>
+                        <ul><li>Para saber mais acesse <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">aqui!</a></li></ul>
+
                 </ul>
+                <p>Para iniciarmos, clone o repositório em seu computador:</p>
                 <pre class="codes-single"><code>git clone</code></pre>
-                <p>Crie um arquivo na pasta iam/config chamado config.tfvars.json com o seguinte conteúdo (coloque os valores da sua própria conta nas três primeiras variáveis):</p>
+                <p>Crie um arquivo na pasta <em>iam/config</em> chamado <em>config.tfvars.json</em> com o seguinte conteúdo (coloque os valores da sua própria conta nas três primeiras variáveis):</p>
                 <pre class="codes"><code>
 {
     "AWS_ACCESS_KEY_ID": "XXXXXXXXXXXXXXXXXXXX",
@@ -77,13 +84,14 @@
                 <pre class="codes-single"><code>terraform init</code></pre>
                 <p>Depois, rodar o seguinte código:</p>
                 <pre class="codes-single"><code>terraform apply -var-file=config/config.tfvars.json</code></pre>
+                <p>Feito isso, acesse o seu <a href="https://aws.amazon.com/pt/console/">console da AWS</a> para verificar que tudo foi criado como esperado no IAM.</p>
             </div>
         </div>
         <div>
             <h2>Roteiro de desenvolvimento da solução:</h2>
             <div>
                 <h3>Criando o arquivo de variáveis:</h3>
-                <p>Com o arquivo <em>config.tfvars.json</em>criado, foi necessário
+                <p>Com o arquivo <em>config.tfvars.json</em> criado, foi necessário
                    criar o arquivo que define o tipo dessas variáveis, chamado <em>variables.tf</em>
                    . Nele, foi colocado o seguinte código:
                 </p>
@@ -227,7 +235,7 @@ tags = {"access-project":"${var.AWS_PROJECT_1}",    # As tags representam o proj
                 gerenciada pelo cliente, sendo necessário seguir os seguintes passos. 
             </p>
             <ul>
-                <li>Crie os arquivos .json com as políticas.</li>
+                <li>Criar os arquivos .json com as políticas.</li>
                 <li>Será necessário criar um arquivo para cada projeto. 
                     Abaixo temos um exemplo do projeto de "megadados".
                 </li>
@@ -479,7 +487,26 @@ resource "aws_iam_user_policy_attachment" "sts" {
                 <p>Para testarmos o funcionamento da solução, será necessário seguir os
                     seguintes passos:
                 </p>
+                <ul>
+                    <li>Acesse o site a seguir: <a href="https://policysim.aws.amazon.com/home/index.jsp">https://policysim.aws.amazon.com/home/index.jsp</a></li>
+                    <li>Conecete-se à sua AWS.</li>
+                    <li>Escolha um usuário e inicie as simulações.</li>
+                    <ul>
+                        <li>Note que algumas das simulações podem aparecer como 
+                            <em>denied</em> mesmo sendo permitidas, pois é necessário 
+                            adicionar valores para que sejam <em>Allowed</em>.
+                        </li>
+                    <li>Segue um exemplo de quando o acesso é permitido:</li>
+                    <img src="img/teste.png">
+                    <li>Segue um exemplo de quando o acesso é negado:</li>
+                    <img src="img/testeNegativo.png">
+                    </ul>
+                </ul>
             </div>
+        </div>
+        <div >
+            <p class="fim"><a class="fim" href="https://github.com/nataliaqmc">@Natália Queiroz Menezes Carreras</a></p> 
+            <p class="fim">Computação em Nuvem - Insper 2023/1</p>
         </div>
         
     </body>

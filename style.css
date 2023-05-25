@@ -63,3 +63,11 @@ table, th, td {
     border: 1px solid;
     padding: 0.2%;
   }
+.fim{
+    color: grey;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: small;
+    margin: 0%;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
