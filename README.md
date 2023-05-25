@@ -1,15 +1,15 @@
 # AWS Identity and Access Management (IAM):
 #### Feito por: Natália Queiroz Menezes Carreras
 
-#### Github Pages: https://nataliaqmc.github.io/Cloud-AWS-IAM/
+#### Documentação - Github Pages: https://nataliaqmc.github.io/Cloud-AWS-IAM/
 
 ### Rúbrica:
 
-- [ ] Conceito C+ : Ambiente funcionando conforme projeto proposto sem os tipos de usuários configurados no IAM.
+- [x] Conceito C+ : Ambiente funcionando conforme projeto proposto sem os tipos de usuários configurados no IAM.
 
-- [ ] Conceito B+ : Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação entregue.
+- [x] Conceito B+ : Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação entregue.
 
-- [ ] Conceito A+ :  Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação bem desenvolvida.
+- [x] Conceito A+ :  Ambiente funcionando conforme projeto proposto e usuários com permissões diferentes no IAM e documentação bem desenvolvida.
 
 ### Referências bibliográficas:
  - Terraform Registry. Disponível em: https://registry.terraform.io/providers/hashicorp/aws/latest/docs. Acesso em: 24 maio. 2023.
